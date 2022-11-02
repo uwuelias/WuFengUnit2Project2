@@ -16,21 +16,21 @@ public class LinearEquation {
 /* Calculates and returns distance between (x1, y1) and (x2, y2), rounded to
    the nearest hundredth */
     public double distance() {
-        return Math.round(Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2)) * 100.0) / 100.0;
+        return roundedToHundredth(Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2)));
     }
 
 
     /* Calculates and returns the y-intercept of the line between (x1, y1) and
        (x2, y2), rounded to the nearest hundredth */
     public double yIntercept() {
-        return y1 - slope() * x1;
+        return roundedToHundredth(y1 - slope() * x1);
     }
 
 
     /* Calculates and returns the slope of the line between (x1, y1) and
        (x2, y2), rounded to the nearest hundredth */
-    public double slope() {
-        return (double) (y2 - y1) / (x2 - x1);
+    public Double slope() {
+        return roundedToHundredth((double) (y2 - y1) / (x2 - x1));
     }
 
 
@@ -59,10 +59,38 @@ public class LinearEquation {
                subtraction!
      */
     public String equation() {
-        return "y = " + (y2 - y1) + "/" + (x2 - x1) + "x + " + yIntercept();
-    }
-
-
+        String slope;
+        String yintercept;
+        if (y1 == y2) {
+            return "y = " + y1;
+        }
+        if (((y2 - y1) < 0 && (x2 - x1) > 0) || ((y2 - y1) > 0 && (x2 - x1) < 0)) {
+            slope = "-" + Math.abs(y2 - y1) + "/" + Math.abs(x2 - x1);
+        } else {
+            slope = Math.abs(y2 - y1) + "/" + Math.abs(x2 - x1);
+        }
+        if (yIntercept() > 0) {
+            yintercept = " + " + yIntercept();
+        }
+        else if (yIntercept() < 0) {
+            yintercept = " - " + Math.abs(yIntercept());
+        }
+        else {
+            yintercept = "";
+        }
+        if ((double)(y2 -y1) / (x2 - x1) == -1) {
+            return "y = -x" + yintercept;
+        }
+        else if ((double)(y2 -y1) / (x2 - x1) == 1) {
+            return "y = x" + yintercept;
+        }
+        else if ((y2 - y1) % (x2 - x1) == 0) {
+            return "y = " + slope() + "x" + yintercept;
+        }
+        else {
+            return "y = " + slope + "x" + yintercept;
+        }
+        }
     /* Returns a String of the coordinate point on the line that has the given x value, with
        both x and y coordinates as decimals to the nearest hundredth, e.g (-5.0, 6.75) */
     public String coordinateForX(double xValue) {
@@ -94,7 +122,7 @@ public class LinearEquation {
       */
     public String lineInfo() {
         return "The original points: (" + x1 + ", " + y1 + ") and (" + x2 + ", " + y2 + ")" +
-                "\nThe equation of the line in y = mx + b format is: y = " + (y2 - y1) + "/" + (x2 - x1) + "x + " + yIntercept() +
+                "\nThe equation of the line in y = mx + b format is: " + equation() +
                 "\nThe slope of the line, as a decimal is: " + slope() +
                 "\nThe y-intercept of the line is: " + yIntercept() +
                 "\nThe distance between the two points is: " + distance();
